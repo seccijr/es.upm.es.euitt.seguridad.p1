@@ -15,9 +15,17 @@ public class Menu {
     public void printSymetricMenu() {
         System.out.println("Elija una opción para CRIPTOGRAFÍA SIMÉTRICA:");
         System.out.println("0. Volver al menu anterior.");
-        System.out.println("2. Generar clave.");
-        System.out.println("3. Cifrado.");
+        System.out.println("1. Generar clave.");
+        System.out.println("2. Cifrado.");
         System.out.println("3. Descifrado.");
+    }
+
+    public void printCiferMenu() {
+        System.out.println("Introduzca el nombre del fichero a cifrar:");
+    }
+
+    public void printDecryptMenu() {
+        System.out.println("Introduzca el nombre del fichero a descrifrar:");
     }
 
     public MainMenuOptEnum requestMainOption() {
@@ -67,6 +75,8 @@ public class Menu {
 
         this.printSymetricMenu();
         SymetricMenuOptEnum symOpt = this.requestSymetricOption();
+        String fileName = null;
+        SerpentCBC engine = new SerpentCBC();
 
         switch (symOpt) {
             case VOLVER:
@@ -75,8 +85,14 @@ public class Menu {
                 KeyGenerator kg = new KeyGenerator();
                 break;
             case CIFRAR:
+                this.printCiferMenu();
+                fileName = this.getStrOpt();
+                engine.encryptFile(fileName);
                 break;
             case DESCIFRAR:
+                this.printDecryptMenu();
+                fileName = this.getStrOpt();
+                engine.decryptFile(fileName);
                 break;
             default:
                 break;

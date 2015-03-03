@@ -1,6 +1,9 @@
 package es.upm.euitt.seguridad;
 
+import java.io.File;
 import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import org.bouncycastle.crypto.paddings.PaddedBufferedBlockCipher;
 import org.bouncycastle.crypto.engines.SerpentEngine;
@@ -40,35 +43,74 @@ public class SerpentCBC {
     }
 
     public void encrypt(InputStream in, OutputStream out) throws ShortBufferException,
-           IllegalBlockSizeException, BadPaddingException, DataLengthException,
-           IllegalStateException, InvalidCipherTextException {
-               try {
-                   int noBytesRead = 0;
-                   int noBytesProcessed = 0;
+       IllegalBlockSizeException, BadPaddingException, DataLengthException,
+       IllegalStateException, InvalidCipherTextException {
+       try {
+           int noBytesRead = 0;
+           int noBytesProcessed = 0;
 
-                   while ((noBytesRead = in.read(buf)) >= 0) {
+           while ((noBytesRead = in.read(buf)) >= 0) {
+               noBytesProcessed = encryptCipher.processBytes(buf, 0, noBytesRead, obuf, 0);
+               out.write(obuf, 0, noBytesProcessed);
+           }
+           noBytesProcessed = encryptCipher.doFinal(obuf, 0);
+           out.write(obuf, 0, noBytesProcessed);
+           out.flush();
+       }
+       catch (java.io.IOException e) {
+           System.out.println(e.getMessage());
+       }
+    }
 
-                       noBytesProcessed = encryptCipher.processBytes(buf, 0, noBytesRead, obuf, 0);
-                       out.write(obuf, 0, noBytesProcessed);
-                   }
-                   noBytesProcessed = encryptCipher.doFinal(obuf, 0);
-                   out.write(obuf, 0, noBytesProcessed);
-                   out.flush();
-               }
-               catch (java.io.IOException e) {
-                   System.out.println(e.getMessage());
-               }
+    public void decrypt(InputStream in, OutputStream out)
+    throws ShortBufferException, IllegalBlockSizeException,  BadPaddingException,
+            DataLengthException, IllegalStateException, InvalidCipherTextException {
+        try {
+            int noBytesRead = 0;
+            int noBytesProcessed = 0;
+
+            while ((noBytesRead = in.read(buf)) >= 0) {
+                    noBytesProcessed = decryptCipher.processBytes(buf, 0, noBytesRead, obuf, 0);
+                    out.write(obuf, 0, noBytesProcessed);
+            }
+            noBytesProcessed = decryptCipher.doFinal(obuf, 0);
+            out.write(obuf, 0, noBytesProcessed);
+            out.flush();
+        }
+        catch (java.io.IOException e) {
+             System.out.println(e.getMessage());
+        }
     }
 
     public void encryptFile(String fileName){
         try {
 
-            File file = new File(fileName);
-            InputStream fis = fci.openInputStream();
-            OutputStream fos = fco.openOutputStream();
+            File ifile = new File(fileName);
+            File ofile = new File(fileName + ".encrypted");
+            InputStream fis = new FileInputStream(ifile);
+            OutputStream fos = new FileOutputStream(ofile);
 
             // Encrypt
-            this.encrypt(fis, fci.fileSize(), fos);
+            this.encrypt(fis, fos);
+
+            fis.close();
+            fos.close();
+        }
+        catch (Exception e) {
+            System.out.println("");
+        }
+    }
+
+    public void decryptFile(String fileName){
+        try {
+
+            File ifile = new File(fileName);
+            File ofile = new File(fileName + ".decrypted");
+            InputStream fis = new FileInputStream(ifile);
+            OutputStream fos = new FileOutputStream(ofile);
+
+            // Encrypt
+            this.decrypt(fis, fos);
 
             fis.close();
             fos.close();
