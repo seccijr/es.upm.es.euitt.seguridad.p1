@@ -1,4 +1,4 @@
-package es.upm.euitt.seguridad;
+package es.upm.euitt.seguridad.crypto;
 
 import java.io.File;
 import java.io.InputStream;
