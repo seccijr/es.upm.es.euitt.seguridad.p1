@@ -8,11 +8,13 @@ import es.upm.euitt.seguridad.enumerators.AsymetricMenuOptEnum;
 
 public class AsymetricMenu extends BaseMenu {
     public void printAsymetricMenu() {
-        System.out.println("Elija una opción para CRIPTOGRAFÍA SIMÉTRICA:");
+        System.out.println("Elija una opción para CRIPTOGRAFÍA ASIMÉTRICA:");
         System.out.println("0. Volver al menu anterior.");
-        System.out.println("1. Generar clave.");
+        System.out.println("1. Generar pareja de claves.");
         System.out.println("2. Cifrado.");
         System.out.println("3. Descifrado.");
+        System.out.println("4. Firmar digitalmente.");
+        System.out.println("5. Verificar firma digital.");
     }
 
     public AsymetricMenuOptEnum requestAsymetricOption() {
@@ -26,7 +28,7 @@ public class AsymetricMenu extends BaseMenu {
         }
     }
 
-    public MainMenuOptEnum symetricMenu() {
+    public MainMenuOptEnum asymetricMenu() {
 
         this.printAsymetricMenu();
         AsymetricMenuOptEnum symOpt = this.requestAsymetricOption();

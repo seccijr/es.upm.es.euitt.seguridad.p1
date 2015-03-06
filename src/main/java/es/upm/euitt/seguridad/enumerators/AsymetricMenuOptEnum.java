@@ -1,7 +1,7 @@
 package es.upm.euitt.seguridad.enumerators;
 
 public enum AsymetricMenuOptEnum {
-    VOLVER, GENERAR_CLAVE, CIFRAR, DESCIFRAR, ERRONEA;
+    VOLVER, GENERAR_CLAVE, CIFRAR, DESCIFRAR, FIRMAR, VERIFICAR, ERRONEA;
 
     public static AsymetricMenuOptEnum getOpt(int opt) {
         try {
