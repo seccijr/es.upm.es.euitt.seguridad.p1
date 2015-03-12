@@ -34,7 +34,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>1.2.1</version>
                 <configuration>
-                    <mainClass>es.upm.euitt.seguridad.P1</mainClass>
+                    <mainClass>es.upm.euitt.seguridad.Main</mainClass>
                 </configuration>
             </plugin>
             <plugin>
