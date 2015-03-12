@@ -1,13 +1,13 @@
 package es.upm.euitt.seguridad.enumerators;
 
-public enum AsymetricMenuOptEnum {
+public enum AsymmetricMenuOptEnum {
     VOLVER, GENERAR_CLAVE, CIFRAR, DESCIFRAR, FIRMAR, VERIFICAR, ERRONEA;
 
-    public static AsymetricMenuOptEnum getOpt(int opt) {
+    public static AsymmetricMenuOptEnum getOpt(int opt) {
         try {
-            return AsymetricMenuOptEnum.values()[opt];
+            return AsymmetricMenuOptEnum.values()[opt];
         } catch (ArrayIndexOutOfBoundsException e) {
-            return AsymetricMenuOptEnum.ERRONEA;
+            return AsymmetricMenuOptEnum.ERRONEA;
         }
     }
 }

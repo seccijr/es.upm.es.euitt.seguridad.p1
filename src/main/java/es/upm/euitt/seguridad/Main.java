@@ -2,7 +2,7 @@ package es.upm.euitt.seguridad;
 
 import es.upm.euitt.seguridad.menu.MainMenu;
 import es.upm.euitt.seguridad.menu.SymetricMenu;
-import es.upm.euitt.seguridad.menu.AsymetricMenu;
+import es.upm.euitt.seguridad.menu.AsymmetricMenu;
 import es.upm.euitt.seguridad.enumerators.MainMenuOptEnum;
 
 public class Main {
@@ -18,7 +18,7 @@ public class Main {
                 me = sm.symetricMenu();
                 break;
             case ASIMETRICA:
-                AsymetricMenu am = new AsymetricMenu();
+                AsymmetricMenu am = new AsymmetricMenu();
                 me = am.asymetricMenu();
                 break;
             default:

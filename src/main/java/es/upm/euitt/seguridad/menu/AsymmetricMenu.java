@@ -3,11 +3,15 @@ package es.upm.euitt.seguridad.menu;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import es.upm.euitt.seguridad.enumerators.MainMenuOptEnum;
-import es.upm.euitt.seguridad.enumerators.AsymetricMenuOptEnum;
+import es.upm.euitt.seguridad.enumerators.AsymmetricMenuOptEnum;
+import es.upm.euitt.seguridad.crypto.KeyPairManager;
 
-public class AsymetricMenu extends BaseMenu {
-    public void printAsymetricMenu() {
+public class AsymmetricMenu extends BaseMenu {
+    AsymmetricCipherKeyPair keyPair = null;
+
+    public void printAsymmetricMenu() {
         System.out.println("Elija una opción para CRIPTOGRAFÍA ASIMÉTRICA:");
         System.out.println("0. Volver al menu anterior.");
         System.out.println("1. Generar pareja de claves.");
@@ -17,27 +21,41 @@ public class AsymetricMenu extends BaseMenu {
         System.out.println("5. Verificar firma digital.");
     }
 
-    public AsymetricMenuOptEnum requestAsymetricOption() {
+    protected void printPublicKeyFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero a donde quiere alojar la clave pública:");
+    }
+
+    protected void printPrivateKeyFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero a donde quiere alojar la clave private:");
+    }
+
+    public AsymmetricMenuOptEnum requestAsymmetricOption() {
         try {
             int optInt = Integer.parseInt(this.getStrOpt());
 
-            return AsymetricMenuOptEnum.getOpt(optInt);
+            return AsymmetricMenuOptEnum.getOpt(optInt);
         } catch (NumberFormatException e) {
 
-            return AsymetricMenuOptEnum.ERRONEA;
+            return AsymmetricMenuOptEnum.ERRONEA;
         }
     }
 
     public MainMenuOptEnum asymetricMenu() {
 
-        this.printAsymetricMenu();
-        AsymetricMenuOptEnum symOpt = this.requestAsymetricOption();
+        this.printAsymmetricMenu();
+        AsymmetricMenuOptEnum symOpt = this.requestAsymmetricOption();
         String fileName = null;
 
         switch (symOpt) {
             case VOLVER:
                 break;
             case GENERAR_CLAVE:
+                this.printPublicKeyFileNameMenu();
+                String publicKeyFileName = this.getStrOpt();
+                this.printPrivateKeyFileNameMenu();
+                String privateKeyFileName = this.getStrOpt();
+                KeyPairManager keyManager = new KeyPairManager();
+                keyManager.generateAndSave(publicKeyFileName, privateKeyFileName);
                 break;
             case CIFRAR:
                 this.printCiferMenu();
