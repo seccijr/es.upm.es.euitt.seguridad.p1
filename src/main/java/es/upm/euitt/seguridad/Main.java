@@ -6,19 +6,20 @@ import es.upm.euitt.seguridad.menu.AsymmetricMenu;
 import es.upm.euitt.seguridad.enumerators.MainMenuOptEnum;
 
 public class Main {
+    public static SymetricMenu sm;
+    public static MainMenu mm;
+    public static AsymmetricMenu am;
+
     public static MainMenuOptEnum chooseMenu(MainMenuOptEnum me) {
 
         switch (me) {
             case MAIN:
-                MainMenu mm = new MainMenu();
                 me = mm.mainMenu();
                 break;
             case SIMETRICA:
-                SymetricMenu sm = new SymetricMenu();
                 me = sm.symetricMenu();
                 break;
             case ASIMETRICA:
-                AsymmetricMenu am = new AsymmetricMenu();
                 me = am.asymetricMenu();
                 break;
             default:
@@ -33,6 +34,9 @@ public class Main {
      * @param args
      */
     public static void main(String[] args) {
+        Main.sm = new SymetricMenu();
+        Main.mm = new MainMenu();
+        Main.am = new AsymmetricMenu();
         MainMenuOptEnum me = MainMenuOptEnum.MAIN;
 
         while (me != MainMenuOptEnum.SALIR) {

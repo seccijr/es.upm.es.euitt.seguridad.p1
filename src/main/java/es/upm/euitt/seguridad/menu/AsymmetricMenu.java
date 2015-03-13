@@ -7,6 +7,8 @@ import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import es.upm.euitt.seguridad.enumerators.MainMenuOptEnum;
 import es.upm.euitt.seguridad.enumerators.AsymmetricMenuOptEnum;
 import es.upm.euitt.seguridad.crypto.KeyPairManager;
+import es.upm.euitt.seguridad.crypto.RSAPKCS1Padded;
+import org.bouncycastle.crypto.params.RSAKeyParameters;
 
 public class AsymmetricMenu extends BaseMenu {
     AsymmetricCipherKeyPair keyPair = null;
@@ -45,7 +47,7 @@ public class AsymmetricMenu extends BaseMenu {
         this.printAsymmetricMenu();
         AsymmetricMenuOptEnum symOpt = this.requestAsymmetricOption();
         String fileName = null;
-
+        RSAPKCS1Padded cipher;
         switch (symOpt) {
             case VOLVER:
                 break;
@@ -55,15 +57,19 @@ public class AsymmetricMenu extends BaseMenu {
                 this.printPrivateKeyFileNameMenu();
                 String privateKeyFileName = this.getStrOpt();
                 KeyPairManager keyManager = new KeyPairManager();
-                keyManager.generateAndSave(publicKeyFileName, privateKeyFileName);
+                this.keyPair = keyManager.generateAndSave(publicKeyFileName, privateKeyFileName);
                 break;
             case CIFRAR:
                 this.printCiferMenu();
                 fileName = this.getStrOpt();
+                cipher = new RSAPKCS1Padded((RSAKeyParameters)(this.keyPair.getPrivate()));
+                cipher.encryptFile(fileName);
                 break;
             case DESCIFRAR:
                 this.printDecryptMenu();
                 fileName = this.getStrOpt();
+                cipher = new RSAPKCS1Padded((RSAKeyParameters)(this.keyPair.getPublic()));
+                cipher.decryptFile(fileName);
                 break;
             default:
                 break;
