@@ -6,7 +6,6 @@ import java.io.InputStreamReader;
 import es.upm.euitt.seguridad.enumerators.MainMenuOptEnum;
 import es.upm.euitt.seguridad.enumerators.SymetricMenuOptEnum;
 import es.upm.euitt.seguridad.crypto.SerpentCBC;
-import es.upm.euitt.seguridad.crypto.KeyGenerator;
 
 public class SymetricMenu extends BaseMenu {
     public void printSymetricMenu() {
@@ -15,6 +14,10 @@ public class SymetricMenu extends BaseMenu {
         System.out.println("1. Generar clave.");
         System.out.println("2. Cifrado.");
         System.out.println("3. Descifrado.");
+    }
+
+    protected void printKeyFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero para la clave:");
     }
 
     public SymetricMenuOptEnum requestSymetricOption() {
@@ -34,21 +37,33 @@ public class SymetricMenu extends BaseMenu {
         SymetricMenuOptEnum symOpt = this.requestSymetricOption();
         SerpentCBC engine = new SerpentCBC();
         String fileName;
+        String keyName;
+        byte[] key;
 
         switch (symOpt) {
             case VOLVER:
                 break;
             case GENERAR_CLAVE:
-                KeyGenerator kg = new KeyGenerator();
+                this.printKeyFileNameMenu();
+                fileName = this.getStrOpt();
+                engine.generateKey(fileName);
                 break;
             case CIFRAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                key = engine.restoreKey(keyName);
                 this.printCiferMenu();
                 fileName = this.getStrOpt();
+                engine = new SerpentCBC(key);
                 engine.encryptFile(fileName);
                 break;
             case DESCIFRAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                key = engine.restoreKey(keyName);
                 this.printDecryptMenu();
                 fileName = this.getStrOpt();
+                engine = new SerpentCBC(key);
                 engine.decryptFile(fileName);
                 break;
             default:
