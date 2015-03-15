@@ -86,7 +86,7 @@ public class KeyPairManager {
             String modulusStr = br.readLine();
             modulus = new BigInteger(modulusStr, 16);
             String exponentStr = br.readLine();
-            exponent = new BigInteger(modulusStr, 16);
+            exponent = new BigInteger(exponentStr, 16);
         }
         catch (FileNotFoundException e) {
             e.printStackTrace();

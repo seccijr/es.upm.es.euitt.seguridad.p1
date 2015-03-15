@@ -11,6 +11,7 @@ import es.upm.euitt.seguridad.crypto.RSAPKCS1Padded;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 
 public class AsymmetricMenu extends BaseMenu {
+
     public void printAsymmetricMenu() {
         System.out.println("Elija una opción para CRIPTOGRAFÍA ASIMÉTRICA:");
         System.out.println("0. Volver al menu anterior.");
@@ -25,6 +26,18 @@ public class AsymmetricMenu extends BaseMenu {
         System.out.println("Es una clave privada?");
         System.out.println("1. Sí.");
         System.out.println("Cualquier otro caso. No.");
+    }
+
+    protected void toSignFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero a firmar:");
+    }
+
+    protected void toVerifyFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero que quiere verificar:");
+    }
+
+    protected void signatureFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero con la firma:");
     }
 
     protected void printKeyFileNameMenu() {
@@ -92,6 +105,26 @@ public class AsymmetricMenu extends BaseMenu {
                 key = keyManager.restore(keyName, isPrivate);
                 cipher = new RSAPKCS1Padded(key);
                 cipher.decryptFile(fileName);
+                break;
+            case FIRMAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                this.toSignFileNameMenu();
+                fileName = this.getStrOpt();
+                key = keyManager.restore(keyName, true);
+                cipher = new RSAPKCS1Padded(key);
+                cipher.signFile(fileName);
+                break;
+            case VERIFICAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                this.toVerifyFileNameMenu();
+                fileName = this.getStrOpt();
+                key = keyManager.restore(keyName, false);
+                cipher = new RSAPKCS1Padded(key);
+                boolean verification = cipher.verifyFile(fileName);
+                if (verification) System.out.println("Fichero coherente");
+                else System.out.println("Fichero corrupto");
                 break;
             default:
                 break;
