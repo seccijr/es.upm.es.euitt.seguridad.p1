@@ -101,11 +101,11 @@ public class RSAPKCS1Padded extends Encryptor {
         return result;
     }
 
-    public void signFile(String fileName) {
+    public void signFile(String inFileName, String signatureFileName) {
         try {
 
-            File ifile = new File(fileName);
-            File ofile = new File(fileName + ".signed");
+            File ifile = new File(inFileName);
+            File ofile = new File(signatureFileName);
             InputStream fis = new FileInputStream(ifile);
             OutputStream fos = new FileOutputStream(ofile);
 
@@ -120,13 +120,13 @@ public class RSAPKCS1Padded extends Encryptor {
         }
     }
 
-    public boolean verifyFile(String fileName) {
+    public boolean verifyFile(String inFileName, String signatureFileName) {
         boolean result = false;
 
         try {
 
-            File ifile = new File(fileName);
-            File ssfile = new File(fileName + ".signed");
+            File ifile = new File(inFileName);
+            File ssfile = new File(signatureFileName);
             InputStream fis = new FileInputStream(ifile);
             InputStream ss = new FileInputStream(ssfile);
 

@@ -13,6 +13,10 @@ public class BaseMenu {
         System.out.println("Introduzca el nombre del fichero a descrifrar:");
     }
 
+    protected void printResultMenu() {
+        System.out.println("Introduzca el nombre del fichero de salida:");
+    }
+
     protected String getStrOpt() {
         BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
         try {

@@ -12,11 +12,11 @@ public abstract class Encryptor {
 
     public abstract void decrypt(InputStream in, OutputStream out) throws InvalidCipherTextException;
 
-    public void encryptFile(String fileName) {
+    public void encryptFile(String inFileName, String outFileName) {
         try {
 
-            File ifile = new File(fileName);
-            File ofile = new File(fileName + ".encrypted");
+            File ifile = new File(inFileName);
+            File ofile = new File(outFileName);
             InputStream fis = new FileInputStream(ifile);
             OutputStream fos = new FileOutputStream(ofile);
 
@@ -31,11 +31,11 @@ public abstract class Encryptor {
         }
     }
 
-    public void decryptFile(String fileName) {
+    public void decryptFile(String inFileName, String outFileName) {
         try {
 
-            File ifile = new File(fileName);
-            File ofile = new File(fileName + ".decrypted");
+            File ifile = new File(inFileName);
+            File ofile = new File(outFileName);
             InputStream fis = new FileInputStream(ifile);
             OutputStream fos = new FileOutputStream(ofile);
 

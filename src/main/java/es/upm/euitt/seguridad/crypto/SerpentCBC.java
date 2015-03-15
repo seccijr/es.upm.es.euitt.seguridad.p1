@@ -26,11 +26,6 @@ public class SerpentCBC extends Encryptor {
 
     byte[] key = null;
 
-    public SerpentCBC(){
-        key = "SECRET_1SECRET_2SECRET_3".getBytes();
-        InitCiphers();
-    }
-
     public SerpentCBC(byte[] keyBytes){
         key = new byte[keyBytes.length];
         System.arraycopy(keyBytes, 0 , key, 0, keyBytes.length);
@@ -44,13 +39,11 @@ public class SerpentCBC extends Encryptor {
             byte[] r = new byte[32];
             Random rand = new Random();
             rand.nextBytes(r);
-            System.out.println("Clave generadad: " + new String(r));
             byte[] rHex = Hex.encodeHexString(r).getBytes();
             os.write(rHex, 0, rHex.length);
             os.flush();
             os.close();
 
-            System.out.println("Clave guardada: " + new String(rHex));
         }
         catch (Exception e) {
             e.printStackTrace();
@@ -72,10 +65,8 @@ public class SerpentCBC extends Encryptor {
                 outputStream.write(buf);
             }
             byte[] rHex = outputStream.toByteArray();
-            System.out.println("Clave leida: " + new String(rHex));
             Hex hex = new Hex();
             r = hex.decode(rHex);
-            System.out.println("Clave recuperada: " + new String(r));
 
             in.close();
         }

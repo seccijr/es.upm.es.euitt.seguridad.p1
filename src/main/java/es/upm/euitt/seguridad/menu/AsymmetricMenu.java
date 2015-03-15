@@ -36,7 +36,7 @@ public class AsymmetricMenu extends BaseMenu {
         System.out.println("Introduzca el nombre del fichero que quiere verificar:");
     }
 
-    protected void signatureFileNameMenu() {
+    protected void printSignatureFileNameMenu() {
         System.out.println("Introduzca el nombre del fichero con la firma:");
     }
 
@@ -68,7 +68,9 @@ public class AsymmetricMenu extends BaseMenu {
         this.printAsymmetricMenu();
         AsymmetricMenuOptEnum symOpt = this.requestAsymmetricOption();
         KeyPairManager keyManager = new KeyPairManager();
-        String fileName = null;
+        String inFileName = null;
+        String outFileName = null;
+        String signedFileName = null;
         RSAPKCS1Padded cipher;
         String keyName;
         boolean isPrivate;
@@ -90,10 +92,12 @@ public class AsymmetricMenu extends BaseMenu {
                 this.printIsPrivateMenu();
                 isPrivate = this.getStrOpt() == "1";
                 this.printCiferMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printResultMenu();
+                outFileName = this.getStrOpt();
                 key = keyManager.restore(keyName, isPrivate);
                 cipher = new RSAPKCS1Padded(key);
-                cipher.encryptFile(fileName);
+                cipher.encryptFile(inFileName, outFileName);
                 break;
             case DESCIFRAR:
                 this.printKeyFileNameMenu();
@@ -101,28 +105,34 @@ public class AsymmetricMenu extends BaseMenu {
                 this.printIsPrivateMenu();
                 isPrivate = this.getStrOpt() == "1";
                 this.printDecryptMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printResultMenu();
+                outFileName = this.getStrOpt();
                 key = keyManager.restore(keyName, isPrivate);
                 cipher = new RSAPKCS1Padded(key);
-                cipher.decryptFile(fileName);
+                cipher.decryptFile(inFileName, outFileName);
                 break;
             case FIRMAR:
                 this.printKeyFileNameMenu();
                 keyName = this.getStrOpt();
                 this.toSignFileNameMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printResultMenu();
+                outFileName = this.getStrOpt();
                 key = keyManager.restore(keyName, true);
                 cipher = new RSAPKCS1Padded(key);
-                cipher.signFile(fileName);
+                cipher.signFile(inFileName, outFileName);
                 break;
             case VERIFICAR:
                 this.printKeyFileNameMenu();
                 keyName = this.getStrOpt();
                 this.toVerifyFileNameMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printSignatureFileNameMenu();
+                signedFileName = this.getStrOpt();
                 key = keyManager.restore(keyName, false);
                 cipher = new RSAPKCS1Padded(key);
-                boolean verification = cipher.verifyFile(fileName);
+                boolean verification = cipher.verifyFile(inFileName, signedFileName);
                 if (verification) System.out.println("Fichero coherente");
                 else System.out.println("Fichero corrupto");
                 break;

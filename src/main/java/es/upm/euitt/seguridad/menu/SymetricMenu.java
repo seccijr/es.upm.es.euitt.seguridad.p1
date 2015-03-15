@@ -35,36 +35,41 @@ public class SymetricMenu extends BaseMenu {
 
         this.printSymetricMenu();
         SymetricMenuOptEnum symOpt = this.requestSymetricOption();
-        SerpentCBC engine = new SerpentCBC();
-        String fileName;
+        byte[] key = new byte[32];
+        SerpentCBC engine = new SerpentCBC(key);
+        String inFileName;
+        String outFileName;
         String keyName;
-        byte[] key;
 
         switch (symOpt) {
             case VOLVER:
                 break;
             case GENERAR_CLAVE:
                 this.printKeyFileNameMenu();
-                fileName = this.getStrOpt();
-                engine.generateKey(fileName);
+                keyName = this.getStrOpt();
+                engine.generateKey(keyName);
                 break;
             case CIFRAR:
                 this.printKeyFileNameMenu();
                 keyName = this.getStrOpt();
                 key = engine.restoreKey(keyName);
                 this.printCiferMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printResultMenu();
+                outFileName = this.getStrOpt();
                 engine = new SerpentCBC(key);
-                engine.encryptFile(fileName);
+                engine.encryptFile(inFileName, outFileName);
                 break;
             case DESCIFRAR:
                 this.printKeyFileNameMenu();
                 keyName = this.getStrOpt();
                 key = engine.restoreKey(keyName);
                 this.printDecryptMenu();
-                fileName = this.getStrOpt();
+                inFileName = this.getStrOpt();
+                this.printResultMenu();
+                outFileName = this.getStrOpt();
                 engine = new SerpentCBC(key);
-                engine.decryptFile(fileName);
+                engine.decryptFile(inFileName, outFileName);
                 break;
             default:
                 break;
