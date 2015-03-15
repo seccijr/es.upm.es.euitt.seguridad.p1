@@ -46,7 +46,7 @@ public abstract class Encryptor {
             fos.close();
         }
         catch (Exception e) {
-            System.out.println("");
+            e.printStackTrace();
         }
     }
 }

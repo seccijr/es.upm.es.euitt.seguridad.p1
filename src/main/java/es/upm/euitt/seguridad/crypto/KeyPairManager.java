@@ -5,12 +5,16 @@ import java.security.SecureRandom;
 import java.math.BigInteger;
 import java.security.NoSuchAlgorithmException;
 import java.io.File;
+import java.io.FileReader;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.FileNotFoundException;
 import org.bouncycastle.crypto.AsymmetricCipherKeyPair;
 import org.bouncycastle.crypto.generators.RSAKeyPairGenerator;
 import org.bouncycastle.crypto.params.RSAKeyGenerationParameters;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.DecoderException;
 
 public class KeyPairManager {
     public AsymmetricCipherKeyPair generate() throws NoSuchAlgorithmException {
@@ -70,4 +74,27 @@ public class KeyPairManager {
         }
     }
 
+    public RSAKeyParameters restore(String path, boolean isPrivate) {
+        File file = new File(path);
+        BigInteger modulus = null;
+        BigInteger exponent = null;
+
+        try {
+            FileReader fileReader = new FileReader(file);
+            BufferedReader br = new BufferedReader(fileReader);
+            String line = null;
+            String modulusStr = br.readLine();
+            modulus = new BigInteger(modulusStr, 16);
+            String exponentStr = br.readLine();
+            exponent = new BigInteger(modulusStr, 16);
+        }
+        catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+        catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return new RSAKeyParameters(isPrivate, modulus, exponent);
+    }
 }

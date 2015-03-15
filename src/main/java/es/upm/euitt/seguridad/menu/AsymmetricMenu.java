@@ -11,8 +11,6 @@ import es.upm.euitt.seguridad.crypto.RSAPKCS1Padded;
 import org.bouncycastle.crypto.params.RSAKeyParameters;
 
 public class AsymmetricMenu extends BaseMenu {
-    AsymmetricCipherKeyPair keyPair = null;
-
     public void printAsymmetricMenu() {
         System.out.println("Elija una opción para CRIPTOGRAFÍA ASIMÉTRICA:");
         System.out.println("0. Volver al menu anterior.");
@@ -23,12 +21,22 @@ public class AsymmetricMenu extends BaseMenu {
         System.out.println("5. Verificar firma digital.");
     }
 
+    protected void printIsPrivateMenu() {
+        System.out.println("Es una clave privada?");
+        System.out.println("1. Sí.");
+        System.out.println("Cualquier otro caso. No.");
+    }
+
+    protected void printKeyFileNameMenu() {
+        System.out.println("Introduzca el nombre del fichero para la clave:");
+    }
+
     protected void printPublicKeyFileNameMenu() {
-        System.out.println("Introduzca el nombre del fichero a donde quiere alojar la clave pública:");
+        System.out.println("Introduzca el nombre del fichero para la clave pública:");
     }
 
     protected void printPrivateKeyFileNameMenu() {
-        System.out.println("Introduzca el nombre del fichero a donde quiere alojar la clave private:");
+        System.out.println("Introduzca el nombre del fichero para la clave privada:");
     }
 
     public AsymmetricMenuOptEnum requestAsymmetricOption() {
@@ -46,8 +54,13 @@ public class AsymmetricMenu extends BaseMenu {
 
         this.printAsymmetricMenu();
         AsymmetricMenuOptEnum symOpt = this.requestAsymmetricOption();
+        KeyPairManager keyManager = new KeyPairManager();
         String fileName = null;
         RSAPKCS1Padded cipher;
+        String keyName;
+        boolean isPrivate;
+        RSAKeyParameters key;
+
         switch (symOpt) {
             case VOLVER:
                 break;
@@ -56,19 +69,28 @@ public class AsymmetricMenu extends BaseMenu {
                 String publicKeyFileName = this.getStrOpt();
                 this.printPrivateKeyFileNameMenu();
                 String privateKeyFileName = this.getStrOpt();
-                KeyPairManager keyManager = new KeyPairManager();
-                this.keyPair = keyManager.generateAndSave(publicKeyFileName, privateKeyFileName);
+                keyManager.generateAndSave(publicKeyFileName, privateKeyFileName);
                 break;
             case CIFRAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                this.printIsPrivateMenu();
+                isPrivate = this.getStrOpt() == "1";
                 this.printCiferMenu();
                 fileName = this.getStrOpt();
-                cipher = new RSAPKCS1Padded((RSAKeyParameters)(this.keyPair.getPrivate()));
+                key = keyManager.restore(keyName, isPrivate);
+                cipher = new RSAPKCS1Padded(key);
                 cipher.encryptFile(fileName);
                 break;
             case DESCIFRAR:
+                this.printKeyFileNameMenu();
+                keyName = this.getStrOpt();
+                this.printIsPrivateMenu();
+                isPrivate = this.getStrOpt() == "1";
                 this.printDecryptMenu();
                 fileName = this.getStrOpt();
-                cipher = new RSAPKCS1Padded((RSAKeyParameters)(this.keyPair.getPublic()));
+                key = keyManager.restore(keyName, isPrivate);
+                cipher = new RSAPKCS1Padded(key);
                 cipher.decryptFile(fileName);
                 break;
             default:

@@ -13,8 +13,7 @@ public class RSAPKCS1Padded extends Encryptor {
     private AsymmetricBlockCipher decryptCipher;
     private RSAKeyParameters key;
 
-    private byte[] buf = new byte[16];
-    private byte[] obuf = new byte[512];
+    private byte[] buf = new byte[48];
 
     public RSAPKCS1Padded(RSAKeyParameters key){
         this.key = key;
@@ -30,18 +29,19 @@ public class RSAPKCS1Padded extends Encryptor {
 
     @Override
     public void encrypt(InputStream in, OutputStream out) throws InvalidCipherTextException {
-       try {
-           int noBytesRead = 0;
+        try {
+            int noBytesRead = 0;
 
-           while ((noBytesRead = in.read(buf)) >= 0) {
-               obuf = encryptCipher.processBlock(buf, 0, noBytesRead);
-               out.write(obuf, 0, obuf.length);
-           }
-           out.flush();
-       }
-       catch (java.io.IOException e) {
-           System.out.println(e.getMessage());
-       }
+            while ((noBytesRead = in.read(buf)) >= 0) {
+                byte[] obuf = encryptCipher.processBlock(buf, 0, noBytesRead);
+                System.out.println("Bytes cifrados: " + new String(obuf));
+                out.write(obuf, 0, obuf.length);
+            }
+            out.flush();
+        }
+        catch (java.io.IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     @Override
@@ -50,13 +50,13 @@ public class RSAPKCS1Padded extends Encryptor {
             int noBytesRead = 0;
 
             while ((noBytesRead = in.read(buf)) >= 0) {
-                    obuf = decryptCipher.processBlock(buf, 0, noBytesRead);
-                    out.write(obuf, 0, obuf.length);
+                byte[] obuf = decryptCipher.processBlock(buf, 0, noBytesRead);
+                out.write(obuf, 0, obuf.length);
             }
             out.flush();
         }
         catch (java.io.IOException e) {
-             System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 }
